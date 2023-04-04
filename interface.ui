@@ -266,7 +266,7 @@ border-color: white;
 padding: 15px;</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="saveButton">
+  <widget class="QPushButton" name="eventButton">
    <property name="geometry">
     <rect>
      <x>40</x>
@@ -282,7 +282,7 @@ border-radius: 10px;
 
 background-color: white;
 color:#5c6898;
-font:20px;
+font:16px;
 }
 
 QPushButton:hover{
@@ -291,7 +291,7 @@ color:rgb(62, 70, 102)}
 </string>
    </property>
    <property name="text">
-    <string>Save</string>
+    <string>Add event</string>
    </property>
   </widget>
   <widget class="QPushButton" name="addButton">

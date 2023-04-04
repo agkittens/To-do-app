@@ -17,8 +17,8 @@ class Window(QWidget):
         self.setWindowIcon(QtGui.QIcon(r"assets\sparkle.png"))
 
         self.calendarWidget.selectionChanged.connect(self.get_date)
-        self.saveButton.clicked.connect(self.save)
         self.addButton.clicked.connect(self.add_task)
+        self.removeButton.clicked.connect(self.remove_task)
         self.get_date()
 
     def get_date(self):
@@ -36,25 +36,14 @@ class Window(QWidget):
         for res in results:
             item = QListWidgetItem(str(res[0]))
             item.setFlags(item.flags() | QtCore.Qt.ItemIsUserCheckable)
-
             if res[1] == 1:
                 item.setCheckState(QtCore.Qt.Checked)
             elif res[1] == 0:
                 item.setCheckState(QtCore.Qt.Unchecked)
             self.listWidget.addItem(item)
+        self.save()
 
-    def add_task(self):
-        new_task = str(self.lineEdit.text())
-
-        query = "INSERT INTO tasks(task, completed, date) VALUES (?,?,?)"
-        row = (new_task, 0, date,)
-
-        cursor.execute(query, row)
-        db.commit()
-        self.update_tasks()
-        self.lineEdit.clear()
-
-    def save(self, date):
+    def save(self):
         for idx in range(self.listWidget.count()):
             item = self.listWidget.item(idx)
             task = item.text()
@@ -67,6 +56,32 @@ class Window(QWidget):
             row = (task, date,)
             cursor.execute(query, row)
         db.commit()
+
+    def add_task(self):
+        new_task = str(self.lineEdit.text())
+
+        query = "INSERT INTO tasks(task, completed, date) VALUES (?,?,?)"
+        row = (new_task, 0, date,)
+        cursor.execute(query, row)
+        db.commit()
+
+        self.update_tasks()
+        self.lineEdit.clear()
+
+    def add_event(self):
+        pass
+
+    def remove_task(self):
+        current_row = self.listWidget.currentRow()
+        task = self.listWidget.takeItem(current_row)
+
+        query = "DELETE FROM tasks WHERE task = ? AND date = ?"
+        row = (task.text(), date,)
+        cursor.execute(query, row )
+        db.commit()
+        del task
+
+        self.update_tasks()
 
 app = QApplication(sys.argv)
 window = Window()
