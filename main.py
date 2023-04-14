@@ -18,7 +18,8 @@ class Window(QWidget):
 
         self.calendarWidget.selectionChanged.connect(self.get_date)
         self.addButton.clicked.connect(self.add_task)
-        self.removeButton.clicked.connect(self.remove_task)
+        self.removeButton.clicked.connect(self.remove_item)
+        self.eventButton.clicked.connect(self.add_event)
         self.get_date()
 
     def get_date(self):
@@ -38,9 +39,15 @@ class Window(QWidget):
             item.setFlags(item.flags() | QtCore.Qt.ItemIsUserCheckable)
             if res[1] == 1:
                 item.setCheckState(QtCore.Qt.Checked)
+
             elif res[1] == 0:
                 item.setCheckState(QtCore.Qt.Unchecked)
+
+            elif res[1] == None:
+                item.setFlags(item.flags() | QtCore.Qt.NoItemFlags)
+
             self.listWidget.addItem(item)
+
         self.save()
 
     def save(self):
@@ -69,17 +76,26 @@ class Window(QWidget):
         self.lineEdit.clear()
 
     def add_event(self):
-        pass
+        new_event = str(self.lineEdit.text())
 
-    def remove_task(self):
+        query = "INSERT INTO tasks(task, completed, date) VALUES (?,?,?)"
+        row = (new_event, None, date)
+        cursor.execute(query, row)
+        db.commit()
+
+        self.update_tasks()
+        self.lineEdit.clear()
+
+
+    def remove_item(self):
         current_row = self.listWidget.currentRow()
-        task = self.listWidget.takeItem(current_row)
+        item = self.listWidget.takeItem(current_row)
 
         query = "DELETE FROM tasks WHERE task = ? AND date = ?"
-        row = (task.text(), date,)
+        row = (item.text(), date,)
         cursor.execute(query, row )
         db.commit()
-        del task
+        del item
 
         self.update_tasks()
 
