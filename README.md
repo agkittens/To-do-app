@@ -1,5 +1,5 @@
 # To-do-app
-This is a simple to-do planner application written in Python using the PyQt5 framework. The application allows users to create tasks for each day.
+This is a simple to-do planner application written in Python using the PyQt5 framework. The application allows users to create tasks for each day and add events.
 
 ![img](https://github.com/agkittens/to-do-app/blob/main/assets/example.PNG?raw=true)
 
